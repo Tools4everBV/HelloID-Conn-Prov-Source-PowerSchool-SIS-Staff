@@ -8,3 +8,6 @@ HelloID Provisioning Source Connector for PowerSchool SIS
 - For the Plugin Installation File, see  [Tools4ever_plugin.zip](Assets/Tools4ever_plugin.zip)
 - Click Install. A confirmation message appears. The plugin appears in the Installed Plugins section on the Plugin Management Dashboard page.
 - Retrieve Client ID and Secret
+
+# HelloID Docs
+The official HelloID documentation can be found at: https://docs.helloid.com/
