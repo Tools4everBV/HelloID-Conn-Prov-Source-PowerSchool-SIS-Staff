@@ -82,11 +82,35 @@ function Get-ObjectProperties
         {
             $OutObject[$prop.Name] = Get-ObjectProperties -Object $prop.Value -Depth ($Depth + 1);
         }
+        elseif ($prop.TypeNameOfValue -eq "System.Object[]") 
+        {
+            $OutObject[$prop.Name] = [System.Collections.ArrayList]@()
+            foreach($item in $prop.Value)
+            {
+                $OutObject[$prop.Name].Add($item)
+            }
+        }
         else
         {
-            $OutObject[$prop.Name] = "$($prop.Value)";
+            $OutObject[$prop.Name] = "$($prop.Value)"
         }
     }
+    return $OutObject;
+}
+
+function Get-ExtensionData
+{
+    param ($Object)
+    $OutObject = @{};
+
+    foreach($item in $Object.'_table_extension')
+    {
+        foreach($field in $item.'_field')
+        {
+            $OutObject[$field.Name] = $field.value
+        }
+    }
+
     return $OutObject;
 }
 
@@ -95,6 +119,7 @@ foreach($s in $allstaff)
     $person = @{};
 
     $person = Get-ObjectProperties -Object $s;
+	$person['extensionData'] = Get-ExtensionData $s.'_extension_data'
 
     $person['ExternalId'] = if($s.id) { $s.Id } else { $s.local_id }
     $person['DisplayName'] = "$($s.Name.first_name) $($s.name.last_name) ($($person.ExternalId))";
